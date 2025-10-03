@@ -1,28 +1,28 @@
 # Minecraft Server Tools
 
-PaperMC サーバー運用を補助するためのスクリプト群です。  
+PaperMC サーバー運用を補助するためのスクリプト群です。
 ワールドバックアップ、サーバー更新、プラグイン更新などを自動化します。
 
 ---
 
 ## 📂 構成
 
-- `setup.sh`  
-  初回セットアップ用スクリプト。PaperMC サーバーを `$HOME/minecraft` に展開し、  
+* `setup.sh`
+  初回セットアップ用スクリプト。PaperMC サーバーを `$HOME/minecraft` に展開し、
   systemd サービスを作成して自動起動できるようにします。
 
-- `update.sh`  
-  PaperMC を最新バージョンに更新します。旧バージョンとプラグインは  
+* `update.sh`
+  PaperMC を最新バージョンに更新します。旧バージョンとプラグインは
   `backups/update_YYYYMMDD-HHMMSS/` に退避されます。
 
-- `newworld.sh`  
+* `newworld.sh`
   既存ワールドを `backups/` 以下に退避し、新しいワールドを生成します。
 
-- `plugins_update.sh`  
-  `plugins_list.txt` に基づいて各種プラグインを自動ダウンロードします。  
+* `plugins_update.sh`
+  `plugins_list.txt` に基づいて各種プラグインを自動ダウンロードします。
   ダウンロード失敗時は `FAILED_PLUGINS.txt` に記録されます。
 
-- `plugins_list.txt`  
+* `plugins_list.txt`
   使用するプラグインの一覧（`.jar` ファイル名のみ）。
 
 ---
@@ -30,9 +30,10 @@ PaperMC サーバー運用を補助するためのスクリプト群です。
 ## 🚀 使い方
 
 ### 初回セットアップ
+
 ```bash
 ./setup.sh <PaperMCダウンロードURL>
-````
+```
 
 例:
 
@@ -57,7 +58,7 @@ sudo journalctl -xefu minecraft
 ```
 
 古い `paper.jar` と `plugins/` はバックアップされます。
-PaperMC の最新ダウンロードは [こちら](https://papermc.io/downloads/paper)。
+最新 PaperMC のダウンロードは [こちら](https://papermc.io/downloads/paper)。
 
 ---
 
@@ -75,12 +76,18 @@ PaperMC の最新ダウンロードは [こちら](https://papermc.io/downloads/
 ### プラグイン更新
 
 ```bash
-./plugins_update.sh
+./plugins_update.sh [オプション]
 ```
 
 * `plugins_list.txt` に記載されたプラグインを最新化
 * 成功: `plugins/` に配置
 * 失敗: `backups/plugins_YYYYMMDD-HHMMSS/FAILED_PLUGINS.txt` に記録
+
+#### オプション
+
+* `--enable-essentialsx-addons`
+  EssentialsX の追加モジュール（AntiBuild / Chat / Protect）を含めて更新します。
+  省略時は EssentialsX 本体と Spawn のみ更新対象になります。
 
 ---
 
@@ -95,3 +102,5 @@ PaperMC の最新ダウンロードは [こちら](https://papermc.io/downloads/
 ## 📜 ライセンス
 
 MIT License
+
+---
