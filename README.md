@@ -1,28 +1,28 @@
 # Minecraft Server Tools
 
-PaperMC サーバー運用を補助するためのスクリプト群です。
+PaperMC サーバー運用を補助するためのスクリプト群です。  
 ワールドバックアップ、サーバー更新、プラグイン更新などを自動化します。
 
 ---
 
 ## 📂 構成
 
-* `setup.sh`
-  初回セットアップ用スクリプト。PaperMC サーバーを `$HOME/minecraft` に展開し、
+* `setup.sh`  
+  初回セットアップ用スクリプト。PaperMC サーバーを `$HOME/minecraft` に展開し、  
   systemd サービスを作成して自動起動できるようにします。
 
-* `update.sh`
-  PaperMC を最新バージョンに更新します。旧バージョンとプラグインは
+* `update.sh`  
+  PaperMC を最新バージョンに更新します。旧バージョンとプラグインは  
   `backups/update_YYYYMMDD-HHMMSS/` に退避されます。
 
-* `newworld.sh`
+* `newworld.sh`  
   既存ワールドを `backups/` 以下に退避し、新しいワールドを生成します。
 
-* `plugins_update.sh`
-  `plugins_list.txt` に基づいて各種プラグインを自動ダウンロードします。
+* `plugins_update.sh`  
+  `plugins_list.txt` に基づいて各種プラグインを自動ダウンロードします。  
   ダウンロード失敗時は `FAILED_PLUGINS.txt` に記録されます。
 
-* `plugins_list.txt`
+* `plugins_list.txt`  
   使用するプラグインの一覧（`.jar` ファイル名のみ）。
 
 ---
@@ -33,7 +33,7 @@ PaperMC サーバー運用を補助するためのスクリプト群です。
 
 ```bash
 ./setup.sh <PaperMCダウンロードURL>
-```
+````
 
 例:
 
@@ -89,6 +89,12 @@ sudo journalctl -xefu minecraft
   EssentialsX の追加モジュール（AntiBuild / Chat / Protect）を含めて更新します。
   省略時は EssentialsX 本体と Spawn のみ更新対象になります。
 
+#### BlueMap 特殊処理
+
+* `BlueMap.jar` を導入した場合、自動で `plugins/BlueMap/core.conf` の
+  `accept-download: true` が設定され、初回起動時に必要リソースが自動ダウンロードされます。
+  追加の手動操作は不要です。
+
 ---
 
 ## 💡 ヒント
@@ -103,4 +109,3 @@ sudo journalctl -xefu minecraft
 
 MIT License
 
----

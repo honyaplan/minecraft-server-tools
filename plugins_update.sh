@@ -99,27 +99,29 @@ get_hangar_release() {
 log "Updating plugins from $LIST_FILE..."
 
 while read -r JAR; do
+  URL=""
+  AFTER_DOWNLOAD_HOOK=""
+
   case "$JAR" in
     # --- 安定取得 ---
     Chunky.jar) URL=$(get_hangar_release "Chunky") ;;
 
     # BlueMap は Modrinth の bukkit/paper/spigot を優先、無ければ GitHub にフォールバック
     BlueMap.jar)
-      URL=""
       URL=$(get_modrinth_release "bluemap" ".*\\.jar$" "bukkit|paper|spigot") || true
       if [ -z "$URL" ]; then
         URL=$(get_github_release "BlueMap-Minecraft/BlueMap" ".*spigot.*\\.jar$")
+      fi
+      if [ -n "$URL" ]; then
+        AFTER_DOWNLOAD_HOOK="sed -i 's/accept-download: false/accept-download: true/' \"$PLUGINS_DIR/BlueMap/core.conf\" || true"
       fi
       ;;
 
     Geyser-Spigot.jar) URL="https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot" ;;
     DiscordSRV.jar) URL=$(get_github_release "DiscordSRV/DiscordSRV" ".*\\.jar$") ;;
     Vault.jar) URL="https://github.com/MilkBowl/Vault/releases/latest/download/Vault.jar" ;;
-
-    # Modrinth もローダーフィルタで forge 等を除外
     WorldEdit.jar) URL=$(get_modrinth_release "worldedit" ".*\\.jar$" "bukkit|paper|spigot") ;;
     TerraformGenerator.jar) URL=$(get_modrinth_release "terraformgenerator" ".*\\.jar$" "bukkit|paper|spigot") ;;
-
     Plan.jar) URL=$(get_github_release "plan-player-analytics/Plan" "Plan.*\\.jar$") ;;
     LuckPerms-Bukkit.jar) URL=$(curl -s "https://metadata.luckperms.net/data/all" | jq -r '.downloads.bukkit // empty') ;;
     EssentialsXSpawn.jar) URL=$(get_github_release "EssentialsX/Essentials" "Spawn.*\\.jar$") ;;
@@ -145,18 +147,17 @@ while read -r JAR; do
         esac
       else
         warn "Skipping $JAR (EssentialsX addon disabled)"
-        URL=""
       fi
       ;;
-
-    # --- 未対応 ---
     *)
       warn "No URL mapping for $JAR, skipping"
-      URL=""
       ;;
   esac
 
-  [ -n "$JAR" ] && [ -n "$URL" ] && download "$URL" "$JAR"
+  if [ -n "$JAR" ] && [ -n "$URL" ]; then
+    download "$URL" "$JAR"
+    [ -n "$AFTER_DOWNLOAD_HOOK" ] && eval "$AFTER_DOWNLOAD_HOOK" && unset AFTER_DOWNLOAD_HOOK
+  fi
 done < "$LIST_FILE"
 
 if [ -f "$BACKUP_DIR/FAILED_PLUGINS.txt" ]; then
