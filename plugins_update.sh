@@ -70,10 +70,10 @@ log "Updating plugins from $LIST_FILE..."
 
 while read -r JAR; do
   case "$JAR" in
-    # --- ✅ 成功実績のあるプラグイン ---
+    Chunky.jar) URL=$(get_hangar_release "Chunky") ;;
+    BlueMap.jar) URL=$(get_github_release "BlueMap-Minecraft/BlueMap" ".*spigot.*\\.jar$") ;;
     Geyser-Spigot.jar) URL="https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot" ;;
     DiscordSRV.jar) URL=$(get_github_release "DiscordSRV/DiscordSRV" ".*\\.jar$") ;;
-    BlueMap.jar) URL=$(get_modrinth_release "bluemap" ".*\\.jar$") ;;
     Vault.jar) URL="https://github.com/MilkBowl/Vault/releases/latest/download/Vault.jar" ;;
     WorldEdit.jar) URL=$(get_modrinth_release "worldedit" ".*bukkit.*\\.jar$") ;;
     TerraformGenerator.jar) URL=$(get_modrinth_release "terraformgenerator" ".*\\.jar$") ;;
@@ -86,9 +86,6 @@ while read -r JAR; do
     GSit.jar) URL=$(get_github_release "Gecolay/GSit" ".*\\.jar$") ;;
     EssentialsX.jar) URL=$(get_github_release "EssentialsX/Essentials" "^EssentialsX-[0-9].*\\.jar$") ;;
     EssentialsXProtect.jar) URL=$(get_github_release "EssentialsX/Essentials" "Protect.*\\.jar$") ;;
-    Chunky.jar) URL=$(get_modrinth_release "chunky" ".*\\.jar$") ;;
-
-    # --- ⚠️ 修正版を使うもの ---
     EssentialsXGeoIP.jar) warn "$JAR is deprecated (no longer distributed)"; URL="" ;;
     ViaVersion.jar) URL=$(get_github_release "ViaVersion/ViaVersion" "ViaVersion.*\\.jar$") ;;
     ViaBackwards.jar) URL=$(get_github_release "ViaVersion/ViaBackwards" "ViaBackwards.*\\.jar$") ;;
