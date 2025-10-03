@@ -45,6 +45,7 @@ PaperMC サーバー運用を補助するためのスクリプト群です。
 ```bash
 sudo systemctl start minecraft
 sudo systemctl status minecraft
+sudo journalctl -xefu minecraft
 ```
 
 ---
@@ -94,8 +95,3 @@ PaperMC の最新ダウンロードは [こちら](https://papermc.io/downloads/
 ## 📜 ライセンス
 
 MIT License
-
-```
-
-
-
